@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* Dark by default, the same greys and mint as tabsesh. Light is paper and ink, with the mint
+   darkened until it passes AA on white. One accent: actions, focus, selection, the "core" marker. */
+:root {
+  --bg: #121316;
+  --raised: #18191d;
+  --line: #2b2d33;
+  --ink: #e4e4e7;
+  --muted: #9a9aa3;
+  --accent: #7dd3a8;
+  --accent-ink: #0f1a14;
+  --glow: rgb(125 211 168 / 0.09);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #f4f4ef;
+  --raised: #fbfbf8;
+  --line: #d6d6cf;
+  --ink: #141414;
+  --muted: #56565a;
+  --accent: #1a7148;
+  --accent-ink: #ffffff;
+  --glow: rgb(26 113 72 / 0.08);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --font-sans: var(--font-commissioner), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html {
+  background: var(--bg);
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  caret-color: var(--accent);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+* {
+  scrollbar-color: var(--line) transparent;
+}
+
+a {
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+.font-mono {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* The theme button shows where it will take you. */
+.theme-icon-dark {
+  display: none;
+}
+:root[data-theme="light"] .theme-icon-light {
+  display: none;
+}
+:root[data-theme="light"] .theme-icon-dark {
+  display: block;
+}
+
+/* Label ........ value, the way a receipt lines things up. */
+.leader {
+  flex: 1;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted var(--muted);
+  transform: translateY(-0.3em);
+}
+
+/* Hero background: a dot matrix, with the dots under the pointer lit in the accent. */
+.dots {
+  background-image: radial-gradient(var(--line) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+.dots-lit {
+  background-image: radial-gradient(var(--accent) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(260px circle at var(--x, 70%) var(--y, 35%), #000 0%, transparent 100%);
+}
+.drift {
+  background: radial-gradient(closest-side, var(--glow), transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .drift {
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+}
+@keyframes drift {
+  to {
+    transform: translate(-12%, 10%) scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .caret {
+    animation: blink 1.06s steps(1, end) infinite;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
