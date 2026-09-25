@@ -1,12 +1,10 @@
 "use client";
 
-const links = [
-  ["about", "#about"],
-  ["skills", "#skills"],
-  ["projects", "#projects"],
-  ["experience", "#experience"],
-  ["contact", "#contact"],
-];
+import { usePathname } from "next/navigation";
+import type { UI } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
+
+const sections = ["about", "skills", "projects", "experience", "contact"] as const;
 
 function toggleTheme() {
   const root = document.documentElement;
@@ -19,37 +17,51 @@ function toggleTheme() {
   }
 }
 
-export function Header() {
+export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {
+  const other = locale === "en" ? "el" : "en";
+  // Same page in the other language: only the first path segment changes.
+  const switchHref = usePathname().replace(/^\/(en|el)/, `/${other}`);
+
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a href="#top" className="font-mono text-sm font-bold tracking-tight no-underline">
+        <a href={`/${locale}`} className="font-mono text-sm font-bold tracking-tight no-underline">
           dg<span className="text-accent">.</span>dev
         </a>
         <nav aria-label="Sections" className="flex items-center gap-1 sm:gap-2">
           <ul className="hidden items-center gap-1 font-mono text-[13px] md:flex">
-            {links.map(([label, href]) => (
-              <li key={href}>
+            {sections.map((s) => (
+              <li key={s}>
                 <a
-                  href={href}
+                  href={`/${locale}#${s}`}
                   className="rounded-sm px-2.5 py-1.5 text-muted no-underline transition-colors duration-150 hover:bg-ink hover:text-bg"
                 >
-                  {label}
+                  {t[s]}
                 </a>
               </li>
             ))}
           </ul>
           <a
-            href="#contact"
+            href={`/${locale}#contact`}
             className="rounded-sm px-2.5 py-1.5 font-mono text-[13px] text-muted no-underline hover:text-ink md:hidden"
           >
-            contact
+            {t.contact}
+          </a>
+          <a
+            href={switchHref}
+            hrefLang={other}
+            lang={other}
+            aria-label={t.language}
+            title={t.language}
+            className="grid h-9 place-items-center rounded-sm border border-line px-2.5 font-mono text-xs font-bold uppercase no-underline transition duration-150 ease-out hover:border-ink hover:bg-ink hover:text-bg active:scale-[0.96]"
+          >
+            {other}
           </a>
           <button
             type="button"
             onClick={toggleTheme}
-            aria-label="Switch colour theme"
-            title="Switch colour theme"
+            aria-label={t.theme}
+            title={t.theme}
             className="grid size-9 place-items-center rounded-sm border border-line text-ink transition duration-150 ease-out hover:border-ink hover:bg-ink hover:text-bg active:scale-[0.96]"
           >
             <svg className="theme-icon-light size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">

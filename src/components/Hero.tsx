@@ -2,11 +2,10 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { facts, profile } from "@/lib/content";
+import { profile, type UI } from "@/lib/content";
 import { EASE } from "./Reveal";
 
 const COMMAND = "whoami";
-const OUTPUT = "software engineer · backend, data, the odd browser extension";
 
 // Types the command once, like the terminal header on my GitHub profile.
 function useTyped(text: string, skip: boolean) {
@@ -33,7 +32,7 @@ function Line({ children, i, className }: { children: React.ReactNode; i: number
   );
 }
 
-export function Hero() {
+export function Hero({ t, facts }: { t: UI["hero"]; facts: string[][] }) {
   const reduce = useReducedMotion() ?? false;
   const typed = useTyped(COMMAND, reduce);
   const done = typed >= COMMAND.length;
@@ -70,7 +69,7 @@ export function Hero() {
             animate={{ opacity: done ? 1 : 0 }}
             transition={{ duration: 0.2, delay: 0.15 }}
           >
-            {OUTPUT}
+            {t.output}
             {done && <span className="caret ml-1 inline-block h-[1.1em] w-[0.55em] translate-y-[0.2em] bg-accent" />}
           </motion.p>
 
@@ -88,15 +87,14 @@ export function Hero() {
             transition={{ duration: 0.56, ease: EASE, delay: 1.1 }}
           >
             <p className="mt-8 max-w-xl text-lg leading-relaxed sm:text-xl">
-              I build backends and data tools, mostly in Rust, TypeScript, Python and Java, and I
-              like finding out how the data actually looks before I design around it.
+              {t.lede}
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <a
                 href="#projects"
                 className="inline-flex h-11 items-center gap-2 rounded-sm bg-accent px-6 font-semibold text-accent-ink no-underline transition duration-150 ease-out hover:brightness-110 active:scale-[0.97]"
               >
-                See my work
+                {t.cta}
                 <span aria-hidden="true">↓</span>
               </a>
               <a

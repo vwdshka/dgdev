@@ -1,38 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { Project } from "@/lib/content";
-import { profile } from "@/lib/content";
+import { profile, type Project, type UI } from "@/lib/content";
 import type { RepoStats } from "@/lib/github";
+import type { Locale, Localized } from "@/lib/i18n";
+import { formatDate, Languages } from "./Languages";
 import { EASE } from "./Reveal";
 
-const date = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
+type P = Localized<Project>;
 
-const LANG_COLOURS = ["var(--accent)", "var(--ochre)", "var(--olive)", "var(--rust)"];
+const outline =
+  "rounded-sm border border-line px-3 py-1.5 no-underline transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg";
 
-// Language share as one bar, top three named underneath: the same read as GitHub's own sidebar.
-function Languages({ languages }: { languages: [string, number][] }) {
-  if (!languages.length) return null;
-  const top = languages.slice(0, 3);
-  return (
-    <div>
-      <div className="flex h-1.5 gap-px overflow-hidden rounded-[1px]" aria-hidden="true">
-        {languages.map(([name, pct], i) => (
-          <span
-            key={name}
-            style={{ width: `${pct}%`, background: LANG_COLOURS[i] ?? "var(--muted)" }}
-          />
-        ))}
-      </div>
-      <p className="mt-2 font-mono text-xs text-muted">
-        {top.map(([name, pct]) => `${name} ${pct.toFixed(0)}%`).join(" · ")}
-      </p>
-    </div>
-  );
-}
-
-function Card({ p, stats, i, wide }: { p: Project; stats?: RepoStats; i: number; wide: boolean }) {
+function Card({ p, stats, i, wide, locale, t }: { p: P; stats?: RepoStats; i: number; wide: boolean; locale: Locale; t: UI["projects"] }) {
   const url = stats?.url ?? (p.repo && `${profile.github}/${p.repo}`);
+  const caseHref = p.slug && `/${locale}/projects/${p.slug}`;
   return (
     <motion.article
       initial={{ opacity: 0, y: 16 }}
@@ -45,13 +27,24 @@ function Card({ p, stats, i, wide }: { p: Project; stats?: RepoStats; i: number;
       <div className="flex items-baseline justify-between gap-4 font-mono text-xs text-muted">
         <span>{p.year}</span>
         {stats ? (
-          <span>updated {date.format(new Date(stats.pushedAt))}{stats.stars > 0 && ` · ★ ${stats.stars}`}</span>
+          <span>
+            {t.updated} {formatDate(stats.pushedAt, locale)}
+            {stats.stars > 0 && ` · ★ ${stats.stars}`}
+          </span>
         ) : (
-          !p.repo && <span>no public repo yet</span>
+          !p.repo && <span>{t.noRepo}</span>
         )}
       </div>
 
-      <h3 className="mt-3 font-mono text-xl font-bold tracking-tight sm:text-2xl">{p.name}</h3>
+      <h3 className="mt-3 font-mono text-xl font-bold tracking-tight sm:text-2xl">
+        {caseHref ? (
+          <a href={caseHref} className="no-underline hover:text-accent">
+            {p.name}
+          </a>
+        ) : (
+          p.name
+        )}
+      </h3>
 
       <div className={wide ? "mt-4 grid gap-x-10 gap-y-6 md:grid-cols-[1.4fr_1fr]" : "mt-4 flex flex-1 flex-col gap-6"}>
         <p className="max-w-[68ch] leading-relaxed">{p.summary}</p>
@@ -67,24 +60,32 @@ function Card({ p, stats, i, wide }: { p: Project; stats?: RepoStats; i: number;
       </div>
 
       <ul className="mt-6 flex flex-wrap gap-1.5" aria-label="Stack">
-        {p.tags.map((t) => (
-          <li key={t} className="rounded-sm border border-line px-2 py-0.5 font-mono text-xs">
-            {t}
+        {p.tags.map((tag) => (
+          <li key={tag} className="rounded-sm border border-line px-2 py-0.5 font-mono text-xs">
+            {tag}
           </li>
         ))}
       </ul>
 
       <div className="mt-auto flex flex-wrap items-end justify-between gap-4 border-t border-dashed border-line pt-5 [margin-top:max(1.5rem,auto)]">
         <div className="min-w-0 flex-1 basis-40">{stats && <Languages languages={stats.languages} />}</div>
-        <div className="flex gap-2 font-mono text-sm">
+        <div className="flex flex-wrap gap-2 font-mono text-sm">
+          {caseHref && (
+            <a
+              href={caseHref}
+              className="rounded-sm bg-accent px-3 py-1.5 font-semibold text-accent-ink no-underline transition duration-150 hover:brightness-110"
+            >
+              {t.caseStudy} →
+            </a>
+          )}
           {p.site && (
-            <a href={p.site} target="_blank" rel="noreferrer" className="rounded-sm border border-line px-3 py-1.5 no-underline transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg">
-              live ↗
+            <a href={p.site} target="_blank" rel="noreferrer" className={outline}>
+              {t.live} ↗
             </a>
           )}
           {url && (
-            <a href={url} target="_blank" rel="noreferrer" className="rounded-sm border border-line px-3 py-1.5 no-underline transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg">
-              repo ↗<span className="sr-only"> {p.name} on GitHub</span>
+            <a href={url} target="_blank" rel="noreferrer" className={outline}>
+              repo ↗<span className="sr-only"> {p.name} {t.onGithub}</span>
             </a>
           )}
         </div>
@@ -93,11 +94,11 @@ function Card({ p, stats, i, wide }: { p: Project; stats?: RepoStats; i: number;
   );
 }
 
-export function ProjectGrid({ projects, stats }: { projects: Project[]; stats: Record<string, RepoStats> }) {
+export function ProjectGrid({ projects, stats, locale, t }: { projects: P[]; stats: Record<string, RepoStats>; locale: Locale; t: UI["projects"] }) {
   return (
     <div className="grid gap-5 md:grid-cols-2">
       {projects.map((p, i) => (
-        <Card key={p.name} p={p} i={i} wide={i === 0} stats={p.repo ? stats[p.repo] : undefined} />
+        <Card key={p.name} p={p} i={i} wide={i === 0} stats={p.repo ? stats[p.repo] : undefined} locale={locale} t={t} />
       ))}
     </div>
   );

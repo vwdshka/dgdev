@@ -2,7 +2,8 @@
 
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useRef } from "react";
-import type { Entry } from "@/lib/content";
+import type { Entry, UI } from "@/lib/content";
+import type { Localized } from "@/lib/i18n";
 import { EASE } from "./Reveal";
 
 const marker: Record<Entry["kind"], string> = {
@@ -12,7 +13,7 @@ const marker: Record<Entry["kind"], string> = {
   retail: "bg-rust border-rust",
 };
 
-export function Timeline({ entries }: { entries: Entry[] }) {
+export function Timeline({ entries, kinds }: { entries: Localized<Entry>[]; kinds: UI["kinds"] }) {
   const ref = useRef<HTMLOListElement>(null);
   // The rail draws itself as you read down the list.
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 75%", "end 60%"] });
@@ -43,7 +44,7 @@ export function Timeline({ entries }: { entries: Entry[] }) {
             {e.when.map((w) => (
               <div key={w}>{w}</div>
             ))}
-            <div className="uppercase tracking-wide text-muted">{e.kind}</div>
+            <div className="uppercase tracking-wide text-muted">{kinds[e.kind]}</div>
           </div>
           <div className="md:pl-10">
             <h3 className="text-lg font-bold leading-snug sm:text-xl">{e.title}</h3>
