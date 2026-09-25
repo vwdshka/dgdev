@@ -1,4 +1,4 @@
-// "/" only exists to send people to /en or /el, so it gets its own bare root layout.
+// "/" just forwards to /en or /el, doesn't need the real layout
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

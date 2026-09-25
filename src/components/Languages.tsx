@@ -1,6 +1,6 @@
 const COLOURS = ["var(--accent)", "var(--ochre)", "var(--olive)", "var(--brick)"];
 
-// Language share as one bar, top three named underneath: the same read as GitHub's own sidebar.
+// github-style language bar, top 3 listed underneath
 export function Languages({ languages }: { languages: [string, number][] }) {
   if (!languages.length) return null;
   return (

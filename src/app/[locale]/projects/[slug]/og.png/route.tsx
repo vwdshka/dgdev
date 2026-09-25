@@ -3,7 +3,7 @@ import { projects, ui } from "@/lib/content";
 import { isLocale, locales, localize } from "@/lib/i18n";
 import { caseImage } from "@/lib/og";
 
-// See [locale]/og.png/route.tsx for why this isn't an opengraph-image file.
+// same reason as [locale]/og.png for not using opengraph-image
 export const dynamic = "force-static";
 
 export function generateStaticParams() {

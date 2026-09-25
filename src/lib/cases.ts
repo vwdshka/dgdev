@@ -1,5 +1,5 @@
-// Case studies, one per project that has a `slug` in content.ts. Written from each repo's README
-// and code; numbers and claims here should always be checkable in the repo.
+// one per project with a slug in content.ts, written from each repo's README + code.
+// every number here should be checkable in the repo
 
 import type { T } from "./i18n";
 
@@ -7,7 +7,7 @@ export type Case = {
   slug: string;
   tagline: T;
   problem: T[];
-  /** Columns of boxes, read left to right; arrows go between columns. */
+  // rows top to bottom, arrows between rows
   diagram: (string | T)[][];
   diagramNote: T;
   hard: { title: T; body: T }[];

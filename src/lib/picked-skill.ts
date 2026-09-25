@@ -1,7 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-// The skill picked in the Skills section, shared with the project cards further down the page.
-// Module state is enough: both sections live on the same page and only this one value is shared.
+// the skill picked in Skills, read by the project cards further down
 export type Picked = { name: string; used: string[] } | null;
 
 let picked: Picked = null;

@@ -1,9 +1,9 @@
-// ixnos-data's public static edition: meta.json holds the record count and the last refresh.
+// ixnos-data's static site - meta.json has the record count and the last refresh
 export const IXNOS_META = "https://vwdshka.github.io/ixnos-data/data/meta.json";
 
 export type IxnosMeta = { count: number; generatedAt: string };
 
-/** Read at build time so the number is in the HTML; null if ixnos-data can't be reached. */
+// build-time value so the number is in the html, null if it can't be reached
 export async function getIxnosMeta(): Promise<IxnosMeta | null> {
   try {
     const res = await fetch(IXNOS_META);

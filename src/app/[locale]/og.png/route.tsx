@@ -2,8 +2,8 @@ import { ui } from "@/lib/content";
 import { isLocale, locales, localize } from "@/lib/i18n";
 import { homeImage } from "@/lib/og";
 
-// A route named og.png rather than Next's opengraph-image convention: the export then writes a
-// real .png file, which GitHub Pages serves as image/png (it picks the type by extension).
+// og.png instead of opengraph-image so the exported file has an extension -
+// pages sets the content type from it, and linkedin ignores previews that aren't image/*
 export const dynamic = "force-static";
 
 export function generateStaticParams() {

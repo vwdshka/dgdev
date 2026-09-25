@@ -4,7 +4,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { useRef } from "react";
 import type { Entry, UI } from "@/lib/content";
 import type { Localized } from "@/lib/i18n";
-import { EASE } from "./Reveal";
+import { EASE } from "./motion";
 
 const marker: Record<Entry["kind"], string> = {
   software: "bg-accent border-accent",
@@ -15,7 +15,7 @@ const marker: Record<Entry["kind"], string> = {
 
 export function Timeline({ entries, kinds }: { entries: Localized<Entry>[]; kinds: UI["kinds"] }) {
   const ref = useRef<HTMLOListElement>(null);
-  // The rail draws itself as you read down the list.
+  // rail fills in as you scroll
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 75%", "end 60%"] });
   const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 

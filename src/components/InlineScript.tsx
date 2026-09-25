@@ -1,8 +1,7 @@
 "use client";
 
-// A script that runs while the HTML parses, before the first paint. On the client the type flips
-// to text/plain: React won't execute it there anyway, and this keeps it from warning about that
-// (the pattern from Next's "preventing flash" guide).
+// runs while the html is parsed, before first paint. type flips to text/plain on the client
+// so react doesn't warn about a script it wouldn't run anyway
 export function InlineScript({ html }: { html: string }) {
   return (
     <script

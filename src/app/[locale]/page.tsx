@@ -1,6 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { LiveIxnos } from "@/components/LiveIxnos";
-import { PageSlide } from "@/components/Reveal";
+import { PageSlide } from "@/components/motion";
 import { ProjectGrid } from "@/components/Projects";
 import { About, Heading } from "@/components/Sections";
 import { Skills } from "@/components/Skills";

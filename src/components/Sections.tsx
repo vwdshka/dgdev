@@ -1,5 +1,5 @@
 import { profile, type UI } from "@/lib/content";
-import { Reveal } from "./Reveal";
+import { Reveal } from "./motion";
 
 export function Heading({ id, title, note }: { id: string; title: string; note?: React.ReactNode }) {
   return (

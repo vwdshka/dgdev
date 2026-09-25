@@ -2,8 +2,8 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-// Link previews (LinkedIn, Slack, iMessage...), rendered to PNG at build time. The renderer needs
-// real font files, not woff2, so these come from @fontsource; Greek and Latin are separate subsets.
+// link preview images, rendered at build time. satori needs woff/ttf rather than woff2,
+// hence @fontsource (latin + greek are separate files)
 export const size = { width: 1200, height: 630 };
 
 const c = {

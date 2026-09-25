@@ -15,12 +15,12 @@ function toggleTheme(e: React.MouseEvent<HTMLButtonElement>) {
     try {
       localStorage.setItem("theme", next);
     } catch {
-      // Private windows may refuse storage; the switch still applies to this page.
+      // private mode can throw here, the theme still applies to this page
     }
   };
   if (!("startViewTransition" in document) || matchMedia("(prefers-reduced-motion: reduce)").matches) return apply();
 
-  // The new theme grows out of the button as a circle until it covers the farthest corner.
+  // circle grows from the button until it covers the farthest corner
   const b = e.currentTarget.getBoundingClientRect();
   const x = b.left + b.width / 2;
   const y = b.top + b.height / 2;
@@ -34,14 +34,14 @@ function toggleTheme(e: React.MouseEvent<HTMLButtonElement>) {
         { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)", pseudoElement: "::view-transition-new(root)" },
       ),
     )
-    // Skipped (e.g. a background tab): the theme has still changed, there's just no sweep.
+    // skipped (background tab etc) - theme already changed, just no animation
     .catch(() => {});
   vt.finished.finally(() => root.classList.remove("theme-sweep"));
 }
 
 export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {
   const other = locale === "en" ? "el" : "en";
-  // Same page in the other language: only the first path segment changes.
+  // same page, other language
   const switchHref = usePathname().replace(/^\/(en|el)/, `/${other}`);
 
   return (

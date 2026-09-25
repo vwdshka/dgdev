@@ -6,7 +6,7 @@ import { useState } from "react";
 import type { SkillGroup, UI, works as allWorks } from "@/lib/content";
 import type { Locale, Localized } from "@/lib/i18n";
 import { pickSkill } from "@/lib/picked-skill";
-import { EASE, Reveal } from "./Reveal";
+import { EASE, Reveal } from "./motion";
 
 type Group = Localized<SkillGroup>;
 type Skill = Group["items"][number];
@@ -90,7 +90,6 @@ function UsedIn({
   );
 }
 
-// The panel on the right: `cat` of whichever file is selected in the tree.
 function Terminal({
   group,
   skill,
@@ -118,7 +117,7 @@ function Terminal({
         <p className="truncate">
           <span className="text-accent">~/stack</span> <span aria-hidden="true">$</span> cat {group.group}/{file(skill.name)}
         </p>
-        {/* Keyed, so each file remounts and fades in; the text is already swapped. */}
+        {/* keyed so it remounts and fades in on every pick */}
         <motion.div
           key={skill.name}
           initial={{ opacity: 0.2, y: 4 }}
@@ -166,7 +165,7 @@ export function Skills({
 }: {
   groups: Group[];
   works: Works;
-  /** `work` keys of the projects shown on this page. */
+  // work keys of the projects on this page
   featured: string[];
   locale: Locale;
   t: UI["skills"];
@@ -227,7 +226,7 @@ export function Skills({
                         )}
                         <span className={`w-9 shrink-0 text-right text-xs ${on ? "opacity-70" : "text-muted"}`}>{s.since}</span>
                       </button>
-                      {/* Phones get the file inline, under the row that opened it. */}
+                      {/* on phones the details open under the row instead of the side panel */}
                       {on && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}

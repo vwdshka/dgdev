@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { EASE } from "./Reveal";
+import { EASE } from "./motion";
 
-// Top-to-bottom flow: each row is one layer, data moves down. Works at any width, so phones
-// don't get a squashed left-to-right chart.
+// rows top to bottom instead of columns, so it still reads on a phone
 export function Diagram({ rows }: { rows: string[][] }) {
   return (
     <ol className="flex flex-col items-center rounded-sm border border-line bg-raised px-4 py-8 sm:px-8">

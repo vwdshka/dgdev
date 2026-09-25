@@ -3,11 +3,11 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { profile, type UI } from "@/lib/content";
-import { EASE } from "./Reveal";
+import { EASE } from "./motion";
 
 const COMMAND = "whoami";
 
-// Types the command once, like the terminal header on my GitHub profile.
+// types the command once, same idea as the terminal svg on my github profile
 function useTyped(text: string, skip: boolean) {
   const [n, setN] = useState(0);
   useEffect(() => {
@@ -18,7 +18,7 @@ function useTyped(text: string, skip: boolean) {
   return skip ? text.length : n;
 }
 
-// A line that prints in: clipped from below, settling 8px into place.
+// clip from below + 8px settle
 function Line({ children, i, className }: { children: React.ReactNode; i: number; className?: string }) {
   return (
     <motion.span

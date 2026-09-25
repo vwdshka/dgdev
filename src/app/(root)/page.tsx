@@ -3,8 +3,8 @@ import { InlineScript } from "@/components/InlineScript";
 
 const base = process.env.BASE_PATH ?? "";
 
-// GitHub Pages can't redirect by header, so the browser picks: Greek first choice goes to /el,
-// everyone else to /en. Without JavaScript, the meta refresh and the links still get you there.
+// pages can't redirect on Accept-Language, so the browser decides (greek -> /el, rest -> /en).
+// meta refresh + the links cover no-JS
 const PICK = `location.replace(${JSON.stringify(base)}+(/^el\\b/i.test(navigator.language)?"/el/":"/en/"))`;
 
 export const metadata: Metadata = {

@@ -4,7 +4,7 @@ export type RepoStats = {
   url: string;
   stars: number;
   pushedAt: string;
-  // [language, share of bytes in %], largest first
+  // [language, % of bytes], biggest first
   languages: [string, number][];
 };
 
@@ -16,9 +16,8 @@ type ApiRepo = {
   languages_url: string;
 };
 
-// Runs at build time (the site is a static export; a daily scheduled build keeps it fresh).
-// One list call plus one per featured repo, well inside GitHub's 60 unauthenticated requests
-// an hour. If GitHub is down or rate-limits the build, the cards render without live stats.
+// build time only (static export), the daily workflow run keeps it fresh. 1 + one call per
+// repo, far under github's 60/hour. if github fails the cards just skip the stats
 const cache = { cache: "force-cache" } as const;
 
 export async function getRepoStats(names: string[]): Promise<Record<string, RepoStats>> {

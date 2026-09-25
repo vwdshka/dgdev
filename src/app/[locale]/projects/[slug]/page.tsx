@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Diagram } from "@/components/Diagram";
 import { formatDate, Languages } from "@/components/Languages";
-import { Morph, PageSlide, Reveal } from "@/components/Reveal";
+import { Morph, PageSlide, Reveal } from "@/components/motion";
 import { cases } from "@/lib/cases";
 import { preview, profile, projects, ui } from "@/lib/content";
 import { getRepoStats } from "@/lib/github";
@@ -66,7 +66,7 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
           {t.case.back}
         </Link>
 
-        {/* No fade-in here: the name and numbers arrive by morphing out of the project's card. */}
+        {/* no fade-in, name + numbers morph in from the card */}
         <header className="mt-8 border-b-2 border-ink pb-10">
           <p className="font-mono text-xs text-muted">
             {p.year}

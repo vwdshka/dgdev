@@ -1,6 +1,5 @@
-// Everything the site says lives here and in cases.ts, so updating the CV means editing data,
-// not components. Translatable text is written as { en, el } right where it's used;
-// localize() in i18n.ts picks one language before anything is rendered.
+// all the text on the site lives here (and in cases.ts), so updating the CV = editing this file.
+// translatable strings are { en, el } pairs, localize() in i18n.ts picks one before rendering
 
 import {
   siDocker,
@@ -40,7 +39,7 @@ export const profile = {
   linkedinHandle: "david-gavriilidis",
 };
 
-/** Link-preview image entry for page metadata; the PNGs come from the og.png routes. */
+// og image entry for metadata, the pngs come from the og.png routes
 export const preview = (url: string) => [{ url, width: 1200, height: 630, alt: `${profile.name} · dg.dev` }];
 
 export const ui = {
@@ -163,7 +162,7 @@ export const about = {
   ],
 };
 
-/** Everything a skill can point to as evidence. `slug` means it has a case study on this site. */
+// what a skill can point to. slug = has a case study here
 export const works: Record<string, { name: string; slug?: string; href?: string }> = {
   ixnos: { name: "ixnos-data", slug: "ixnos-data" },
   mydata: { name: "myData-Client-Lib", slug: "mydata-client-lib" },
@@ -181,12 +180,12 @@ export const works: Record<string, { name: string; slug?: string; href?: string 
 
 export type Skill = {
   name: string;
-  /** SVG path from simple-icons, drawn in currentColor on a 24×24 grid. */
+  // simple-icons path, 24x24
   icon: string;
   core?: boolean;
   since: string;
   note: T;
-  /** Keys of `works`; empty means it's in everything. */
+  // keys of works, empty = everything
   used: string[];
 };
 
@@ -487,11 +486,11 @@ export const skills: SkillGroup[] = [
 
 export type Project = {
   name: string;
-  /** Key in `works`, so a selected skill can light up the projects that use it. */
+  // key in works, used to light up the card when a skill is picked
   work: string;
-  /** Matches a case study in cases.ts. */
+  // matches a case study in cases.ts
   slug?: string;
-  /** GitHub repository name under profile.githubUser; omitted when the code isn't public. */
+  // repo under github.com/vwdshka, left out if it isn't public
   repo?: string;
   site?: string;
   year: string;
@@ -500,7 +499,7 @@ export type Project = {
   tags: string[];
 };
 
-// The first project gets the full-width card.
+// first one gets the full-width card
 export const projects: Project[] = [
   {
     name: "ixnos-data",
@@ -588,7 +587,7 @@ export const projects: Project[] = [
 
 export type Entry = {
   kind: "software" | "hospitality" | "retail" | "education";
-  /** One line per period, newest first. */
+  // newest first
   when: T[];
   title: T;
   org: string;
@@ -598,7 +597,7 @@ export type Entry = {
 
 const WAITER: T = { en: "Σερβίτορος Α'", el: "Σερβίτορος Α'" };
 
-// Newest first, by the end of the latest period. Hospitality titles stay as on the contracts.
+// newest first. hospitality titles exactly as on the contracts
 export const timeline: Entry[] = [
   {
     kind: "hospitality",

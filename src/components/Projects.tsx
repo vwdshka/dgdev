@@ -7,10 +7,10 @@ import type { RepoStats } from "@/lib/github";
 import type { Locale, Localized } from "@/lib/i18n";
 import { pickSkill, usePickedSkill } from "@/lib/picked-skill";
 import { formatDate, Languages } from "./Languages";
-import { EASE, Morph } from "./Reveal";
+import { EASE, Morph } from "./motion";
 
-// Cards already revealed once don't fade in again when you come back from a case study, so the
-// name morphing back has something visible to land on.
+// don't replay the fade when coming back from a case study, the morph needs something visible
+// to land on
 const seen = new Set<string>();
 
 type P = Localized<Project>;
@@ -20,7 +20,7 @@ const outline =
 
 type Card = { p: P; stats?: RepoStats; i: number; wide: boolean; locale: Locale; t: UI["projects"]; lit?: string; dim: boolean };
 
-// lit: the picked skill's name when this project uses it. dim: a skill is picked and this one doesn't.
+// lit = the picked skill's name if this project uses it
 function Card({ p, stats, i, wide, locale, t, lit, dim }: Card) {
   const url = stats?.url ?? (p.repo && `${profile.github}/${p.repo}`);
   const caseHref = p.slug && `/${locale}/projects/${p.slug}/`;
@@ -43,7 +43,7 @@ function Card({ p, stats, i, wide, locale, t, lit, dim }: Card) {
       viewport={{ once: true, margin: "0px 0px -60px 0px" }}
       transition={{ duration: 0.56, ease: EASE, delay: (i % 2) * 0.07 }}
       whileHover={{ y: -4 }}
-      // Framer owns the inline opacity, so dimming uses the filter property instead.
+      // framer sets opacity inline, so dimming goes through filter
       className={`group flex flex-col rounded-sm border bg-raised p-5 transition-[border-color,box-shadow,filter] duration-300 hover:border-accent hover:shadow-[0_12px_32px_-16px_var(--glow),0_2px_0_0_var(--accent)] sm:p-7 ${wide ? "md:col-span-2" : ""} ${lit ? "border-accent shadow-[0_0_0_1px_var(--accent)]" : "border-line"} ${dim ? "[filter:opacity(0.4)_saturate(0.6)]" : ""}`}
     >
       <div className="flex items-baseline justify-between gap-4 font-mono text-xs text-muted">
@@ -126,7 +126,7 @@ const fill = (text: string, values: Record<string, string | number>) => text.rep
 
 export function ProjectGrid({ projects, stats, locale, t }: { projects: P[]; stats: Record<string, RepoStats>; locale: Locale; t: UI["projects"] }) {
   const picked = usePickedSkill();
-  // A skill with no listed projects (Git) is in all of them.
+  // empty used list = every project (git)
   const uses = (p: P) => !!picked && (!picked.used.length || picked.used.includes(p.work));
   const count = projects.filter(uses).length;
 

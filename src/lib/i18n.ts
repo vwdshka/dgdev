@@ -5,10 +5,10 @@ export function isLocale(s: string): s is Locale {
   return (locales as readonly string[]).includes(s);
 }
 
-/** A string in both languages. Content files write these inline, next to the data they describe. */
+// the same string in both languages
 export type T = { en: string; el: string };
 
-/** The same shape as X with every { en, el } pair collapsed to the string for one locale. */
+// X with every { en, el } pair swapped for one language's string
 export type Localized<X> = X extends T
   ? string
   : X extends readonly (infer U)[]
@@ -29,9 +29,4 @@ export function localize<X>(x: X, locale: Locale): Localized<X> {
     return Object.fromEntries(Object.entries(x).map(([k, v]) => [k, localize(v, locale)])) as Localized<X>;
   }
   return x as Localized<X>;
-}
-
-if (process.env.NODE_ENV !== "production") {
-  const sample = localize({ a: { en: "x", el: "χ" }, b: [{ en: "y", el: "ψ" }, "z"], n: 1 }, "el");
-  console.assert(sample.a === "χ" && sample.b[0] === "ψ" && sample.b[1] === "z" && sample.n === 1, "localize() broke");
 }

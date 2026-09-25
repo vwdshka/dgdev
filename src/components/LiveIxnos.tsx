@@ -14,12 +14,11 @@ function ago(iso: string, locale: Locale) {
   return rtf.format(-Math.round(minutes / 1440), "day");
 }
 
-// ixnos-data's static edition publishes meta.json (1 KB) and allows any origin, so the hero can
-// show the real record count. The build bakes in a value; the browser refreshes it on load.
+// ixnos-data's static site serves meta.json with CORS open. the count is baked in at build
+// time and refreshed on load
 export function LiveIxnos({ initial, locale, t }: { initial: IxnosMeta | null; locale: Locale; t: UI["live"] }) {
   const [meta, setMeta] = useState(initial);
-  // False on the server and during hydration, true after: relative time is only shown in the
-  // browser, since the server's "now" would never match the reader's.
+  // false on the server/hydration, true after - relative time only makes sense in the browser
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,

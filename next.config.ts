@@ -1,14 +1,13 @@
 import type { NextConfig } from "next";
 
-// GitHub Pages serves plain files, so the whole site is exported at build time. The Pages workflow
-// passes BASE_PATH ("/dgdev-portfolio" for a project site, "" for a user site or custom domain).
+// github pages only serves static files, so everything is exported at build time.
+// BASE_PATH comes from the pages workflow - "/dgdev-portfolio" for a project site, "" for a custom domain
 const basePath = process.env.BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
-  agentRules: false,
   output: "export",
   basePath,
-  // /en/ -> out/en/index.html, which every static host resolves without rewrites.
+  // /en/ -> out/en/index.html, works on any static host
   trailingSlash: true,
   env: { BASE_PATH: basePath },
 };

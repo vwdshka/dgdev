@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
-/* Autumn, in two lights. Dark is roasted brown with cream ink; light is parchment with espresso
-   ink. Pumpkin is the accent (actions, focus, selection, core skills); ochre, olive and brick
-   only tell kinds of things apart (timeline markers, language bars). Every colour here passes
-   AA as text on both grounds. */
+/* dark by default. pumpkin is the accent (actions, focus, core skills), ochre/olive/brick only
+   tell kinds apart (timeline, language bars). all of them pass AA as text on both backgrounds */
 :root {
   --bg: #1c1512;
   --raised: #241b17;
@@ -97,7 +95,7 @@ h2 {
   font-variant-numeric: tabular-nums slashed-zero;
 }
 
-/* The theme button shows where it will take you. */
+/* theme button shows the theme you'd switch to */
 .theme-icon-dark {
   display: none;
 }
@@ -108,7 +106,7 @@ h2 {
   display: block;
 }
 
-/* Label ........ value, the way a receipt lines things up. */
+/* label ........ value, like on a receipt */
 .leader {
   flex: 1;
   min-width: 1.5rem;
@@ -116,7 +114,7 @@ h2 {
   transform: translateY(-0.3em);
 }
 
-/* Hero background: a dot matrix, with the dots under the pointer lit in the accent. */
+/* hero dot grid, dots near the pointer light up */
 .dots {
   background-image: radial-gradient(var(--line) 1px, transparent 1.2px);
   background-size: 22px 22px;
@@ -157,9 +155,8 @@ h2 {
   }
 }
 
-/* Page transitions (React <ViewTransition>, following Next's view-transitions guide).
-   A project's name and numbers morph from its card into the case study; the rest of the page
-   slides 60px in the direction you're going. The header stays put as the fixed reference. */
+/* page transitions - name + numbers morph from the card into the case study, the rest slides
+   60px in the direction you're going. header stays still */
 ::view-transition {
   pointer-events: none;
 }
@@ -235,8 +232,8 @@ h2 {
   }
 }
 
-/* Theme switch: the new theme sweeps out of the button (Header.tsx drives the clip-path). The
-   page is one snapshot for this, so the header's own transition name is switched off. */
+/* theme sweep, animated from Header.tsx. header's own transition name is turned off so the
+   whole page is one snapshot */
 :root.theme-sweep::view-transition-old(root),
 :root.theme-sweep::view-transition-new(root) {
   animation: none;
