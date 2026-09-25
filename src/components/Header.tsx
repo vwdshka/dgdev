@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { UI } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 
@@ -41,8 +42,28 @@ function toggleTheme(e: React.MouseEvent<HTMLButtonElement>) {
 
 export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {
   const other = locale === "en" ? "el" : "en";
+  const pathname = usePathname();
   // same page, other language
-  const switchHref = usePathname().replace(/^\/(en|el)/, `/${other}`);
+  const switchHref = pathname.replace(/^\/(en|el)/, `/${other}`);
+  const onHome = /^\/(en|el)\/?$/.test(pathname);
+  const [active, setActive] = useState<string | null>(null);
+
+  // whichever section crosses the middle of the screen is the one being read
+  useEffect(() => {
+    if (!onHome) return;
+    const targets = ["top", ...sections].map((id) => document.getElementById(id)?.closest("section, footer"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(e.target.id === "top" ? null : (e.target.querySelector("h2")?.id ?? null));
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    targets.forEach((t) => t && io.observe(t));
+    return () => io.disconnect();
+  }, [onHome]);
+  const current = onHome ? active : null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md" style={{ viewTransitionName: "site-header" }}>
@@ -57,7 +78,10 @@ export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {
                 <Link
                   href={`/${locale}/#${s}`}
                   transitionTypes={["nav-back"]}
-                  className="rounded-sm px-2.5 py-1.5 text-muted no-underline transition-colors duration-150 hover:bg-ink hover:text-bg"
+                  aria-current={current === s ? "true" : undefined}
+                  className={`rounded-sm px-2.5 py-1.5 no-underline transition-[color,background-color,box-shadow] duration-200 hover:bg-ink hover:text-bg ${
+                    current === s ? "text-ink shadow-[inset_0_-2px_0_var(--accent)]" : "text-muted"
+                  }`}
                 >
                   {t[s]}
                 </Link>

@@ -93,7 +93,7 @@ export const ui = {
     jump: { en: "highlighted in Projects ↓", el: "επισημαίνεται στα Έργα ↓" },
   },
   projects: {
-    all: { en: "all repositories ↗", el: "όλα τα repositories ↗" },
+    archive: { en: "Full project archive", el: "Όλα τα έργα" },
     noRepo: { en: "no public repo yet", el: "δεν έχει δημοσιευτεί ακόμα" },
     updated: { en: "updated", el: "ενημέρωση" },
     caseStudy: { en: "case study", el: "μελέτη περίπτωσης" },
@@ -119,6 +119,23 @@ export const ui = {
     },
     location: { en: "Location", el: "Τοποθεσία" },
     place: { en: "Kifissia, Athens", el: "Κηφισιά, Αθήνα" },
+    copy: { en: "copy", el: "αντιγραφή" },
+    copied: { en: "copied", el: "αντιγράφηκε" },
+  },
+  archive: {
+    title: { en: "Archive", el: "Αρχείο" },
+    intro: {
+      en: "Every public repository on my GitHub, newest first, including university work and the small things from when I started.",
+      el: "Όλα τα δημόσια repositories στο GitHub μου, από το πιο πρόσφατο, μαζί με πανεπιστημιακές εργασίες και τα μικρά πράγματα από όταν ξεκίνησα.",
+    },
+    year: { en: "Year", el: "Έτος" },
+    project: { en: "Project", el: "Έργο" },
+    builtWith: { en: "Built with", el: "Τεχνολογίες" },
+    link: { en: "Link", el: "Σύνδεσμος" },
+    unavailable: {
+      en: "GitHub couldn't be reached when this page was built. The repositories are all on github.com/vwdshka.",
+      el: "Το GitHub δεν ήταν διαθέσιμο όταν χτίστηκε η σελίδα. Όλα τα repositories είναι στο github.com/vwdshka.",
+    },
   },
   case: {
     back: { en: "← all projects", el: "← όλα τα έργα" },
@@ -143,21 +160,21 @@ export const facts: [T, T][] = [
 
 export const about = {
   lede: {
-    en: "Software engineering graduate from Athens who learned to work fast and carefully on the floor of a busy restaurant first.",
-    el: "Απόφοιτος μηχανικής λογισμικού από την Αθήνα, που έμαθε να δουλεύει γρήγορα και προσεκτικά πρώτα στο σέρβις ενός γεμάτου εστιατορίου.",
+    en: "Software engineering graduate from Athens. I like building things people actually use, and I like them to work the first time.",
+    el: "Απόφοιτος μηχανικής λογισμικού από την Αθήνα. Μου αρέσει να φτιάχνω πράγματα που χρησιμοποιούνται στ' αλήθεια, και να δουλεύουν από την πρώτη φορά.",
   },
   paragraphs: [
     {
-      en: "I graduated in summer 2026 with a BSc in Software Engineering from the University of Greater Manchester. I studied remotely, which meant the degree fitted around full summer seasons at resorts: White Olive in Lindos, Grecotel LuxMe Oasis in the Peloponnese and Aristi Mountain Resort in Zagori, where I worked as Σερβίτορος Α'.",
-      el: "Αποφοίτησα το καλοκαίρι του 2026 με BSc στη Μηχανική Λογισμικού από το University of Greater Manchester. Σπούδασα εξ αποστάσεως, οπότε το πτυχίο χωρούσε γύρω από ολόκληρες καλοκαιρινές σεζόν σε resorts: στο White Olive στη Λίνδο, στο Grecotel LuxMe Oasis στην Πελοπόννησο και στο Aristi Mountain Resort στο Ζαγόρι, όπου δούλεψα ως Σερβίτορος Α'.",
+      en: "I graduated in summer 2026 with a BSc in Software Engineering from the University of Greater Manchester. I studied remotely and worked alongside my degree, including seasons at resorts such as Aristi Mountain Resort in Zagori, which taught me to stay calm and organised when things get busy.",
+      el: "Αποφοίτησα το καλοκαίρι του 2026 με BSc στη Μηχανική Λογισμικού από το University of Greater Manchester. Σπούδασα εξ αποστάσεως και παράλληλα δούλευα, μεταξύ άλλων σε σεζόν σε resorts όπως το Aristi Mountain Resort στο Ζαγόρι, όπου έμαθα να μένω ψύχραιμος και οργανωμένος όταν ο φόρτος ανεβαίνει.",
     },
     {
-      en: "Service taught me things that carry straight over to code. A full terrace doesn't wait, so you plan the next ten minutes before you move. You check the order before it leaves the pass, not after the guest sends it back. And you train the person next to you, because the shift only goes as well as its weakest station.",
-      el: "Το σέρβις μού έμαθε πράγματα που περνάνε αυτούσια στον κώδικα. Μια γεμάτη βεράντα δεν περιμένει, οπότε σχεδιάζεις τα επόμενα δέκα λεπτά πριν κάνεις βήμα. Ελέγχεις την παραγγελία πριν φύγει από την κουζίνα, όχι αφού την επιστρέψει ο πελάτης. Και εκπαιδεύεις αυτόν που δουλεύει δίπλα σου, γιατί η βάρδια πάει τόσο καλά όσο το πιο αδύναμο πόστο της.",
+      en: "Most of what I build starts with a problem I had myself: 60 open tabs, tax XML that gets rejected by the server, public spending data nobody can search. Before I design anything, I look at the real data; for ixnos-data, that meant probing 614,000 records first.",
+      el: "Τα περισσότερα που φτιάχνω ξεκινούν από ένα πρόβλημα που είχα ο ίδιος: 60 ανοιχτές καρτέλες, φορολογικά XML που απορρίπτονται από τον server, δημόσιες δαπάνες που δεν μπορεί να τις ψάξει κανείς. Πριν σχεδιάσω οτιδήποτε, κοιτάζω τα πραγματικά δεδομένα· για το ixnos-data αυτό σήμαινε να εξετάσω πρώτα 614.000 εγγραφές.",
     },
     {
-      en: "Most of what I build starts with a problem I had myself: 60 open tabs, tax XML that gets rejected by the server, public spending data nobody can search. I measure the data before I model it, write the tests that catch the bug before release, and say plainly in the README what the code doesn't do yet.",
-      el: "Τα περισσότερα που φτιάχνω ξεκινούν από ένα πρόβλημα που είχα ο ίδιος: 60 ανοιχτές καρτέλες, φορολογικά XML που απορρίπτονται από τον server, δημόσιες δαπάνες που δεν μπορεί να τις ψάξει κανείς. Μετράω τα δεδομένα πριν τα μοντελοποιήσω, γράφω τα tests που πιάνουν το bug πριν την κυκλοφορία, και λέω καθαρά στο README τι δεν κάνει ακόμα ο κώδικας.",
+      en: "I write the tests that catch the bug before release, keep the moving parts few, and say plainly in the README what the code doesn't do yet.",
+      el: "Γράφω τα tests που πιάνουν το bug πριν την κυκλοφορία, κρατάω τα κινούμενα μέρη λίγα και λέω καθαρά στο README τι δεν κάνει ακόμα ο κώδικας.",
     },
   ],
 };
@@ -713,5 +730,27 @@ export const timeline: Entry[] = [
   },
 ];
 
+
+// one-liners for the archive, since most repos have no GitHub description. only repos whose
+// README says what they are - the rest show without a note
+export const repoNotes: Record<string, T> = {
+  "ixnos-data": { en: "Greek public spending, searchable in Greek or Greeklish", el: "Οι ελληνικές δημόσιες δαπάνες, με αναζήτηση στα ελληνικά ή σε greeklish" },
+  "myData-Client-Lib": { en: "Typed .NET client for AADE's myDATA e-invoicing API", el: "Typed .NET client για το API ηλεκτρονικής τιμολόγησης myDATA της ΑΑΔΕ" },
+  tabsesh: { en: "Tab manager extension, a terminal and a GUI over one core", el: "Επέκταση διαχείρισης καρτελών, τερματικό και GUI πάνω στον ίδιο πυρήνα" },
+  "LLM-Fake-News-Detector": { en: "Three fake-news classifiers side by side, checked with SHAP", el: "Τρεις ταξινομητές ψευδών ειδήσεων δίπλα-δίπλα, ελεγμένοι με SHAP" },
+  OpenChartExcavator: { en: "Lists every business in an area picked on Google Maps (team project)", el: "Καταγράφει κάθε επιχείρηση σε μια περιοχή του Google Maps (ομαδικό έργο)" },
+  CozyChatNoUI: { en: "Multi-user chat over raw TCP sockets", el: "Συνομιλία πολλών χρηστών πάνω σε raw TCP sockets" },
+  "my-instants-api": { en: "Collects a MyInstants profile's favourite sounds into JSON", el: "Συλλέγει τους αγαπημένους ήχους ενός προφίλ MyInstants σε JSON" },
+  "swe6002-lostnfound": { en: "Lost & found for a municipality, with Leaflet maps", el: "Απολεσθέντα αντικείμενα για δήμο, με χάρτες Leaflet" },
+  "swe6002-number-guesser": { en: "Number guessing game, Spring Boot and HTMX", el: "Παιχνίδι μαντέματος αριθμού, Spring Boot και HTMX" },
+  davidFlightsQueue: { en: "Airport queue simulation that puts emergency landings first", el: "Προσομοίωση ουράς αεροδρομίου που δίνει προτεραιότητα στις αναγκαστικές προσγειώσεις" },
+  "background-selector": { en: "CSS gradient generator with live RGBA output", el: "Γεννήτρια CSS gradients με RGBA σε πραγματικό χρόνο" },
+  "firebase-react-chat-app": { en: "Chat room with Google sign-in and a bad-word filter", el: "Chat room με σύνδεση Google και φίλτρο υβριστικών λέξεων" },
+  "python-class-weekly-david": { en: "Weekly Python class exercises", el: "Εβδομαδιαίες ασκήσεις μαθήματος Python" },
+  "smartbrain-frontend": { en: "Face recognition app front end", el: "Front end εφαρμογής αναγνώρισης προσώπων" },
+};
+
+// left out of the archive: the profile README repo
+export const hiddenRepos = ["vwdshka"];
 
 export type UI = Localized<typeof ui>;

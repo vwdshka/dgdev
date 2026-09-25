@@ -1,4 +1,5 @@
 import { profile, type UI } from "@/lib/content";
+import { CopyEmail } from "./CopyEmail";
 import { Reveal } from "./motion";
 
 export function Heading({ id, title, note }: { id: string; title: string; note?: React.ReactNode }) {
@@ -51,6 +52,9 @@ export function Contact({ t }: { t: UI }) {
               {profile.email}
               <span className="block h-0.5 origin-left scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100" />
             </a>
+            <div className="mt-4">
+              <CopyEmail email={profile.email} copy={t.contact.copy} copied={t.contact.copied} />
+            </div>
           </Reveal>
           <Reveal delay={0.08}>
             <ul className="font-mono text-sm">

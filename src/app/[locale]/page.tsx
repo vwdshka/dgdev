@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Hero } from "@/components/Hero";
 import { LiveIxnos } from "@/components/LiveIxnos";
 import { PageSlide } from "@/components/motion";
@@ -5,7 +6,7 @@ import { ProjectGrid } from "@/components/Projects";
 import { About, Heading } from "@/components/Sections";
 import { Skills } from "@/components/Skills";
 import { Timeline } from "@/components/Timeline";
-import { about, facts, profile, projects, skills, timeline, ui, works } from "@/lib/content";
+import { about, facts, projects, skills, timeline, ui, works } from "@/lib/content";
 import { getRepoStats } from "@/lib/github";
 import { getIxnosMeta } from "@/lib/ixnos";
 import { isLocale, localize } from "@/lib/i18n";
@@ -35,16 +36,18 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         </div>
       </section>
       <section aria-labelledby="projects" className="mx-auto max-w-5xl px-4 py-24 sm:px-6">
-        <Heading
-          id="projects"
-          title={t.headings.projects}
-          note={
-            <a href={profile.github} className="hover:text-accent">
-              {t.projects.all}
-            </a>
-          }
-        />
+        <Heading id="projects" title={t.headings.projects} />
         <ProjectGrid projects={localize(projects, locale)} stats={stats} locale={locale} t={t.projects} />
+        <Link
+          href={`/${locale}/archive/`}
+          transitionTypes={["nav-forward"]}
+          className="group mt-8 flex items-center justify-between rounded-sm border border-line px-5 py-4 font-mono text-sm no-underline transition-colors duration-150 hover:border-accent"
+        >
+          {t.projects.archive}
+          <span aria-hidden="true" className="text-accent transition-transform duration-150 group-hover:translate-x-1">
+            →
+          </span>
+        </Link>
       </section>
       <section aria-labelledby="experience" className="border-t border-line">
         <div className="mx-auto max-w-5xl px-4 py-24 sm:px-6">

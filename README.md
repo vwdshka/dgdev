@@ -24,7 +24,9 @@ simple-icons.
   push, stars and language split from the public API: one list call plus one per repo, well
   inside the 60 requests an hour GitHub allows without a token. A daily scheduled build keeps
   them fresh. If GitHub is down or rate-limits the build, the cards render without the stats
-  instead of failing.
+  instead of failing. The `/archive` page lists every public repo the same way, with a one-line
+  note from `repoNotes` in `content.ts`. The workflow passes `GITHUB_TOKEN`, so builds on shared
+  runners don't run into the anonymous rate limit.
 - **Cards turn into case studies.** React's `<ViewTransition>` morphs a project's name and
   numbers from its card into the case study header, and pages slide in the direction you're
   going. Browsers without the View Transitions API just switch pages.
@@ -57,7 +59,7 @@ site or custom domain) and deploys `out/`. It also rebuilds daily at 05:17 UTC.
 
 | Path | What lives there |
 | --- | --- |
-| `src/app/[locale]/` | Root layout, home page, `projects/[slug]` case studies, `og.png` previews |
+| `src/app/[locale]/` | Root layout, home page, `projects/[slug]` case studies, `archive`, `og.png` previews |
 | `src/app/(root)/` | The language picker at `/` |
 | `src/components/` | Header, Hero, Sections, Skills, Projects, Timeline, Diagram |
 | `src/lib/` | Content, case studies, i18n helpers, GitHub loader, preview image renderer |
