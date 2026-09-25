@@ -55,6 +55,7 @@ export function Hero() {
       <div aria-hidden="true" className="dots absolute inset-0 -z-10" />
       <div aria-hidden="true" className="dots-lit absolute inset-0 -z-10" />
       <div aria-hidden="true" className="drift absolute -top-1/3 right-[-20%] -z-10 size-[70vmax]" />
+      <div aria-hidden="true" className="drift-2 absolute -bottom-1/2 left-[-25%] -z-10 size-[60vmax]" />
 
       <div className="mx-auto grid max-w-5xl gap-12 px-4 pb-20 pt-16 sm:px-6 sm:pt-24 lg:grid-cols-[1fr_20rem] lg:items-end lg:pb-28 lg:pt-32">
         <div>
@@ -74,13 +75,12 @@ export function Hero() {
           </motion.p>
 
           <h1 className="mt-10 text-[clamp(2.6rem,8.5vw,5.5rem)] font-bold leading-[1.02] tracking-[-0.035em]">
-            <Line i={0}>{profile.nameEl.split(" ")[0]}</Line>
-            <Line i={1}>{profile.nameEl.split(" ")[1]}</Line>
-            <span className="sr-only"> ({profile.nameEn})</span>
+            {profile.name.split(" ").map((word, i) => (
+              <Line key={word} i={i}>
+                {word}
+              </Line>
+            ))}
           </h1>
-          <Line i={2} className="mt-4 font-mono text-base text-muted sm:text-lg">
-            <span aria-hidden="true">{profile.nameEn}</span>
-          </Line>
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}

@@ -19,12 +19,12 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "David Gavriilidis · Software Engineer",
   description:
-    "Δαβίδ Γαβριηλίδης, software engineer in Athens. Backends, data pipelines and browser extensions in Rust, TypeScript, Python and Java.",
+    "David Gavriilidis, software engineer in Athens. Backends, data pipelines and browser extensions in Rust, TypeScript, Python and Java.",
   authors: [{ name: "David Gavriilidis", url: "https://github.com/vwdshka" }],
 };
 
 export const viewport: Viewport = {
-  themeColor: "#121316",
+  themeColor: "#1c1512",
 };
 
 // Runs before the first paint so a saved light theme doesn't flash dark.

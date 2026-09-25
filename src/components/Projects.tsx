@@ -8,6 +8,8 @@ import { EASE } from "./Reveal";
 
 const date = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
+const LANG_COLOURS = ["var(--accent)", "var(--ochre)", "var(--olive)", "var(--rust)"];
+
 // Language share as one bar, top three named underneath: the same read as GitHub's own sidebar.
 function Languages({ languages }: { languages: [string, number][] }) {
   if (!languages.length) return null;
@@ -18,8 +20,7 @@ function Languages({ languages }: { languages: [string, number][] }) {
         {languages.map(([name, pct], i) => (
           <span
             key={name}
-            style={{ width: `${pct}%`, opacity: Math.max(1 - i * 0.28, 0.2) }}
-            className="bg-accent"
+            style={{ width: `${pct}%`, background: LANG_COLOURS[i] ?? "var(--muted)" }}
           />
         ))}
       </div>

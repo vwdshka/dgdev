@@ -7,9 +7,9 @@ import { EASE } from "./Reveal";
 
 const marker: Record<Entry["kind"], string> = {
   software: "bg-accent border-accent",
-  education: "bg-ink border-ink",
-  hospitality: "bg-bg border-ink",
-  retail: "bg-bg border-muted",
+  education: "bg-ochre border-ochre",
+  hospitality: "bg-olive border-olive",
+  retail: "bg-rust border-rust",
 };
 
 export function Timeline({ entries }: { entries: Entry[] }) {
@@ -28,7 +28,7 @@ export function Timeline({ entries }: { entries: Entry[] }) {
       />
       {entries.map((e, i) => (
         <motion.li
-          key={`${e.org}-${e.when}`}
+          key={`${e.org}-${e.when[0]}`}
           initial={{ opacity: 0, x: -12 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "0px 0px -80px 0px" }}
@@ -40,7 +40,9 @@ export function Timeline({ entries }: { entries: Entry[] }) {
             className={`absolute left-0 top-1.5 size-[11px] border md:left-[13rem] ${marker[e.kind]}`}
           />
           <div className="font-mono text-[13px] md:pr-8 md:pt-0.5 md:text-right">
-            <div>{e.when}</div>
+            {e.when.map((w) => (
+              <div key={w}>{w}</div>
+            ))}
             <div className="uppercase tracking-wide text-muted">{e.kind}</div>
           </div>
           <div className="md:pl-10">

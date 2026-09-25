@@ -25,8 +25,8 @@ export function About() {
         </Reveal>
         <Reveal delay={0.08} className="max-w-[68ch] space-y-5 text-[17px] leading-relaxed">
           <p>
-            I graduated in August 2026 with a BSc in Software Engineering from the University of
-            Bolton. I studied remotely, which meant the degree fitted around full summer seasons at
+            I graduated in summer 2026 with a BSc in Software Engineering from the University of
+            Greater Manchester. I studied remotely, which meant the degree fitted around full summer seasons at
             resorts: White Olive in Lindos, Grecotel LuxMe Oasis in the
             Peloponnese and Aristi Mountain Resort in Zagori, where I worked as Σερβίτορος Α&apos;.
           </p>
@@ -142,7 +142,7 @@ export function Contact() {
           </Reveal>
         </div>
         <div className="mt-24 flex flex-col gap-2 border-t border-dashed border-line pt-6 font-mono text-xs text-muted sm:flex-row sm:justify-between">
-          <span>© 2026 {profile.nameEn} · {profile.nameEl}</span>
+          <span>© 2026 {profile.name}</span>
           <span>Next.js · Tailwind CSS · Framer Motion</span>
         </div>
       </div>
