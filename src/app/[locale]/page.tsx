@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { PageSlide } from "@/components/Reveal";
 import { ProjectGrid } from "@/components/Projects";
 import { About, Heading } from "@/components/Sections";
 import { Skills } from "@/components/Skills";
@@ -7,9 +8,6 @@ import { about, facts, profile, projects, skills, timeline, ui, works } from "@/
 import { getRepoStats } from "@/lib/github";
 import { isLocale, localize } from "@/lib/i18n";
 
-// Repo stats come from the GitHub API; rebuild the page with fresh ones at most once an hour.
-export const revalidate = 3600;
-
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
@@ -17,7 +15,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const stats = await getRepoStats(projects.flatMap((p) => (p.repo ? [p.repo] : [])));
 
   return (
-    <>
+    <PageSlide>
       <Hero t={t.hero} facts={localize(facts, locale)} />
       <About title={t.headings.about} {...localize(about, locale)} />
       <section aria-labelledby="skills" className="border-y border-line bg-raised">
@@ -52,6 +50,6 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
           <Timeline entries={localize(timeline, locale)} kinds={t.kinds} />
         </div>
       </section>
-    </>
+    </PageSlide>
   );
 }

@@ -41,6 +41,9 @@ export const profile = {
   linkedinHandle: "david-gavriilidis",
 };
 
+/** Link-preview image entry for page metadata; the PNGs come from the og.png routes. */
+export const preview = (url: string) => [{ url, width: 1200, height: 630, alt: `${profile.name} · dg.dev` }];
+
 export const ui = {
   meta: {
     title: { en: "David Gavriilidis · Software Engineer", el: "David Gavriilidis · Μηχανικός Λογισμικού" },

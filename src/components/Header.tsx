@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { UI } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
@@ -23,31 +24,33 @@ export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {
   const switchHref = usePathname().replace(/^\/(en|el)/, `/${other}`);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md" style={{ viewTransitionName: "site-header" }}>
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a href={`/${locale}`} className="font-mono text-sm font-bold tracking-tight no-underline">
+        <Link href={`/${locale}/`} transitionTypes={["nav-back"]} className="font-mono text-sm font-bold tracking-tight no-underline">
           dg<span className="text-accent">.</span>dev
-        </a>
+        </Link>
         <nav aria-label="Sections" className="flex items-center gap-1 sm:gap-2">
           <ul className="hidden items-center gap-1 font-mono text-[13px] md:flex">
             {sections.map((s) => (
               <li key={s}>
-                <a
-                  href={`/${locale}#${s}`}
+                <Link
+                  href={`/${locale}/#${s}`}
+                  transitionTypes={["nav-back"]}
                   className="rounded-sm px-2.5 py-1.5 text-muted no-underline transition-colors duration-150 hover:bg-ink hover:text-bg"
                 >
                   {t[s]}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
-          <a
-            href={`/${locale}#contact`}
+          <Link
+            href={`/${locale}/#contact`}
+            transitionTypes={["nav-back"]}
             className="rounded-sm px-2.5 py-1.5 font-mono text-[13px] text-muted no-underline hover:text-ink md:hidden"
           >
             {t.contact}
-          </a>
-          <a
+          </Link>
+          <Link
             href={switchHref}
             hrefLang={other}
             lang={other}
@@ -56,7 +59,7 @@ export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {
             className="grid h-9 place-items-center rounded-sm border border-line px-2.5 font-mono text-xs font-bold uppercase no-underline transition duration-150 ease-out hover:border-ink hover:bg-ink hover:text-bg active:scale-[0.96]"
           >
             {other}
-          </a>
+          </Link>
           <button
             type="button"
             onClick={toggleTheme}

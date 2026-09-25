@@ -16,10 +16,10 @@ type ApiRepo = {
   languages_url: string;
 };
 
-// Unauthenticated GitHub allows 60 requests an hour; with hourly revalidation this page makes
-// one list call plus one per featured repo. If GitHub is down or rate-limits us, the cards
-// just render without the live stats.
-const cache = { next: { revalidate: 3600 } };
+// Runs at build time (the site is a static export; a daily scheduled build keeps it fresh).
+// One list call plus one per featured repo, well inside GitHub's 60 unauthenticated requests
+// an hour. If GitHub is down or rate-limits the build, the cards render without live stats.
+const cache = { cache: "force-cache" } as const;
 
 export async function getRepoStats(names: string[]): Promise<Record<string, RepoStats>> {
   try {

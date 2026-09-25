@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
 import type { SkillGroup, UI, works as allWorks } from "@/lib/content";
 import type { Locale, Localized } from "@/lib/i18n";
@@ -33,12 +34,16 @@ function UsedIn({ skill, works, locale, t }: { skill: Skill; works: Works; local
     <ul className="space-y-1">
       {skill.used.map((key) => {
         const w = works[key];
-        const href = w.slug ? `/${locale}/projects/${w.slug}` : w.href;
+        const link = "underline decoration-line underline-offset-4 hover:text-accent hover:decoration-accent";
         return (
           <li key={key} className="flex gap-2">
             <span aria-hidden="true" className="text-accent">→</span>
-            {href ? (
-              <a href={href} className="underline decoration-line underline-offset-4 hover:text-accent hover:decoration-accent">
+            {w.slug ? (
+              <Link href={`/${locale}/projects/${w.slug}/`} transitionTypes={["nav-forward"]} className={link}>
+                {w.name}
+              </Link>
+            ) : w.href ? (
+              <a href={w.href} className={link}>
                 {w.name}
               </a>
             ) : (
