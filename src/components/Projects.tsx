@@ -1,10 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { profile, type Project, type UI } from "@/lib/content";
 import type { RepoStats } from "@/lib/github";
 import type { Locale, Localized } from "@/lib/i18n";
+import { pickSkill, usePickedSkill } from "@/lib/picked-skill";
 import { formatDate, Languages } from "./Languages";
 import { EASE, Morph } from "./Reveal";
 
@@ -17,7 +18,10 @@ type P = Localized<Project>;
 const outline =
   "rounded-sm border border-line px-3 py-1.5 no-underline transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg";
 
-function Card({ p, stats, i, wide, locale, t }: { p: P; stats?: RepoStats; i: number; wide: boolean; locale: Locale; t: UI["projects"] }) {
+type Card = { p: P; stats?: RepoStats; i: number; wide: boolean; locale: Locale; t: UI["projects"]; lit?: string; dim: boolean };
+
+// lit: the picked skill's name when this project uses it. dim: a skill is picked and this one doesn't.
+function Card({ p, stats, i, wide, locale, t, lit, dim }: Card) {
   const url = stats?.url ?? (p.repo && `${profile.github}/${p.repo}`);
   const caseHref = p.slug && `/${locale}/projects/${p.slug}/`;
   const numbers = (
@@ -39,10 +43,22 @@ function Card({ p, stats, i, wide, locale, t }: { p: P; stats?: RepoStats; i: nu
       viewport={{ once: true, margin: "0px 0px -60px 0px" }}
       transition={{ duration: 0.56, ease: EASE, delay: (i % 2) * 0.07 }}
       whileHover={{ y: -4 }}
-      className={`group flex flex-col rounded-sm border border-line bg-raised p-5 transition-[border-color,box-shadow] duration-200 hover:border-accent hover:shadow-[0_12px_32px_-16px_var(--glow),0_2px_0_0_var(--accent)] sm:p-7 ${wide ? "md:col-span-2" : ""}`}
+      // Framer owns the inline opacity, so dimming uses the filter property instead.
+      className={`group flex flex-col rounded-sm border bg-raised p-5 transition-[border-color,box-shadow,filter] duration-300 hover:border-accent hover:shadow-[0_12px_32px_-16px_var(--glow),0_2px_0_0_var(--accent)] sm:p-7 ${wide ? "md:col-span-2" : ""} ${lit ? "border-accent shadow-[0_0_0_1px_var(--accent)]" : "border-line"} ${dim ? "[filter:opacity(0.4)_saturate(0.6)]" : ""}`}
     >
       <div className="flex items-baseline justify-between gap-4 font-mono text-xs text-muted">
-        <span>{p.year}</span>
+        <span className="flex items-baseline gap-3">
+          {p.year}
+          {lit && (
+            <motion.span
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="rounded-sm bg-accent px-1.5 py-px font-bold text-accent-ink"
+            >
+              {lit}
+            </motion.span>
+          )}
+        </span>
         {stats ? (
           <span>
             {t.updated} {formatDate(stats.pushedAt, locale)}
@@ -106,12 +122,54 @@ function Card({ p, stats, i, wide, locale, t }: { p: P; stats?: RepoStats; i: nu
   );
 }
 
+const fill = (text: string, values: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, k) => String(values[k]));
+
 export function ProjectGrid({ projects, stats, locale, t }: { projects: P[]; stats: Record<string, RepoStats>; locale: Locale; t: UI["projects"] }) {
+  const picked = usePickedSkill();
+  // A skill with no listed projects (Git) is in all of them.
+  const uses = (p: P) => !!picked && (!picked.used.length || picked.used.includes(p.work));
+  const count = projects.filter(uses).length;
+
   return (
-    <div className="grid gap-5 md:grid-cols-2">
-      {projects.map((p, i) => (
-        <Card key={p.name} p={p} i={i} wide={i === 0} stats={p.repo ? stats[p.repo] : undefined} locale={locale} t={t} />
-      ))}
-    </div>
+    <>
+      <AnimatePresence initial={false}>
+        {picked && (
+          <motion.div
+            key="picked"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="overflow-hidden"
+          >
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-sm border border-dashed border-line px-4 py-3 font-mono text-[13px]" aria-live="polite">
+              <span>
+                {count
+                  ? fill(t.matching, { n: count, total: projects.length, skill: picked.name })
+                  : fill(t.noMatch, { skill: picked.name })}
+              </span>
+              <button type="button" onClick={() => pickSkill(null)} className="rounded-sm border border-line px-2.5 py-1 hover:border-ink hover:bg-ink hover:text-bg">
+                {t.showAll} ×
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <div className="grid gap-5 md:grid-cols-2">
+        {projects.map((p, i) => (
+          <Card
+            key={p.name}
+            p={p}
+            i={i}
+            wide={i === 0}
+            stats={p.repo ? stats[p.repo] : undefined}
+            locale={locale}
+            t={t}
+            lit={uses(p) ? picked!.name : undefined}
+            dim={count > 0 && !uses(p)}
+          />
+        ))}
+      </div>
+    </>
   );
 }

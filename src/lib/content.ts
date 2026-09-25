@@ -19,7 +19,6 @@ import {
   siPostgresql,
   siPython,
   siReact,
-  siRust,
   siScikitlearn,
   siSelenium,
   siSpringboot,
@@ -48,8 +47,8 @@ export const ui = {
   meta: {
     title: { en: "David Gavriilidis · Software Engineer", el: "David Gavriilidis · Μηχανικός Λογισμικού" },
     description: {
-      en: "David Gavriilidis, software engineer in Athens. Backends, data pipelines and browser extensions in Rust, TypeScript, Python and Java.",
-      el: "David Gavriilidis, μηχανικός λογισμικού στην Αθήνα. Backends, pipelines δεδομένων και browser extensions σε Rust, TypeScript, Python και Java.",
+      en: "David Gavriilidis, software engineer in Athens. Backends, data pipelines and browser extensions in TypeScript, Python and Java.",
+      el: "David Gavriilidis, μηχανικός λογισμικού στην Αθήνα. Backends, pipelines δεδομένων και browser extensions σε TypeScript, Python και Java.",
     },
   },
   nav: {
@@ -62,14 +61,19 @@ export const ui = {
     language: { en: "Διαβάστε στα ελληνικά", el: "Read in English" },
     skip: { en: "Skip to content", el: "Μετάβαση στο περιεχόμενο" },
   },
+  live: {
+    label: { en: "live", el: "live" },
+    records: { en: "public records tracked", el: "δημόσιες εγγραφές" },
+    refreshed: { en: "refreshed", el: "ανανέωση" },
+  },
   hero: {
     output: {
       en: "software engineer · backend, data, the odd browser extension",
       el: "μηχανικός λογισμικού · backend, δεδομένα, και κάποιο browser extension",
     },
     lede: {
-      en: "I build backends and data tools, mostly in Rust, TypeScript, Python and Java, and I like finding out how the data actually looks before I design around it.",
-      el: "Φτιάχνω backends και εργαλεία δεδομένων, κυρίως σε Rust, TypeScript, Python και Java, και μου αρέσει να βλέπω πώς είναι πραγματικά τα δεδομένα πριν σχεδιάσω γύρω τους.",
+      en: "I build backends and data tools, mostly in TypeScript, Python and Java, and I like finding out how the data actually looks before I design around it.",
+      el: "Φτιάχνω backends και εργαλεία δεδομένων, κυρίως σε TypeScript, Python και Java, και μου αρέσει να βλέπω πώς είναι πραγματικά τα δεδομένα πριν σχεδιάσω γύρω τους.",
     },
     cta: { en: "See my work", el: "Δείτε τη δουλειά μου" },
   },
@@ -87,6 +91,7 @@ export const ui = {
     everywhere: { en: "every project", el: "όλα τα έργα" },
     hint: { en: "pick a file to read it", el: "διαλέξτε ένα αρχείο" },
     files: { en: "files", el: "αρχεία" },
+    jump: { en: "highlighted in Projects ↓", el: "επισημαίνεται στα Έργα ↓" },
   },
   projects: {
     all: { en: "all repositories ↗", el: "όλα τα repositories ↗" },
@@ -95,6 +100,12 @@ export const ui = {
     caseStudy: { en: "case study", el: "μελέτη περίπτωσης" },
     live: { en: "live", el: "live" },
     onGithub: { en: "on GitHub", el: "στο GitHub" },
+    matching: { en: "{n} of {total} projects use {skill}", el: "{n} από {total} έργα χρησιμοποιούν {skill}" },
+    noMatch: {
+      en: "None of these projects use {skill}; the skills panel lists where it's used.",
+      el: "Κανένα από αυτά τα έργα δεν χρησιμοποιεί {skill}· οι δεξιότητες δείχνουν πού χρησιμοποιείται.",
+    },
+    showAll: { en: "show all", el: "όλα" },
   },
   kinds: {
     software: { en: "software", el: "λογισμικό" },
@@ -126,7 +137,7 @@ export const ui = {
 export const facts: [T, T][] = [
   [{ en: "Based in", el: "Βάση" }, { en: "Kifissia, Athens", el: "Κηφισιά, Αθήνα" }],
   [{ en: "Degree", el: "Πτυχίο" }, { en: "BSc Software Eng. · 2026", el: "BSc Software Eng. · 2026" }],
-  [{ en: "Core", el: "Κύρια" }, { en: "Rust · TS · Python · Java", el: "Rust · TS · Python · Java" }],
+  [{ en: "Core", el: "Κύρια" }, { en: "TypeScript · Python · Java", el: "TypeScript · Python · Java" }],
   [{ en: "Speaks", el: "Γλώσσες" }, { en: "Ελληνικά · English · Русский", el: "Ελληνικά · English · Русский" }],
   [{ en: "Looking for", el: "Αναζητώ" }, { en: "Junior backend / data", el: "Junior backend / data" }],
 ];
@@ -165,7 +176,6 @@ export const works: Record<string, { name: string; slug?: string; href?: string 
   lostnfound: { name: "swe6002-lostnfound", href: "https://github.com/vwdshka/swe6002-lostnfound" },
   guesser: { name: "swe6002-number-guesser", href: "https://github.com/vwdshka/swe6002-number-guesser" },
   reactchat: { name: "firebase-react-chat-app", href: "https://github.com/vwdshka/firebase-react-chat-app" },
-  jobs: { name: "job-scrapper-rust" },
   wick: { name: "wick (smart-bulb daemon)" },
 };
 
@@ -180,24 +190,13 @@ export type Skill = {
   used: string[];
 };
 
-export type SkillGroup = { group: string; tone: "accent" | "ochre" | "olive" | "rust"; items: Skill[] };
+export type SkillGroup = { group: string; tone: "accent" | "ochre" | "olive" | "brick"; items: Skill[] };
 
 export const skills: SkillGroup[] = [
   {
     group: "backend",
     tone: "accent",
     items: [
-      {
-        name: "Rust",
-        icon: siRust.path,
-        core: true,
-        since: "2026",
-        note: {
-          en: "Async HTTP with tokio and reqwest, results stored in SQLite, all behind a small CLI.",
-          el: "Ασύγχρονο HTTP με tokio και reqwest, αποτελέσματα σε SQLite, όλα πίσω από ένα μικρό CLI.",
-        },
-        used: ["jobs"],
-      },
       {
         name: "Python",
         icon: siPython.path,
@@ -410,7 +409,7 @@ export const skills: SkillGroup[] = [
   },
   {
     group: "tooling",
-    tone: "rust",
+    tone: "brick",
     items: [
       {
         name: "Git",
@@ -447,10 +446,10 @@ export const skills: SkillGroup[] = [
         icon: siSqlite.path,
         since: "2026",
         note: {
-          en: "Zero-setup local storage for the job aggregator and for Wick's schedules.",
-          el: "Τοπική αποθήκευση χωρίς setup για τον συλλέκτη αγγελιών και τα προγράμματα του Wick.",
+          en: "Zero-setup local storage for Wick's scenes and schedules.",
+          el: "Τοπική αποθήκευση χωρίς setup για τις σκηνές και τα προγράμματα του Wick.",
         },
-        used: ["jobs", "wick"],
+        used: ["wick"],
       },
       {
         name: "PostgreSQL",
@@ -488,6 +487,8 @@ export const skills: SkillGroup[] = [
 
 export type Project = {
   name: string;
+  /** Key in `works`, so a selected skill can light up the projects that use it. */
+  work: string;
   /** Matches a case study in cases.ts. */
   slug?: string;
   /** GitHub repository name under profile.githubUser; omitted when the code isn't public. */
@@ -503,6 +504,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     name: "ixnos-data",
+    work: "ixnos",
     slug: "ixnos-data",
     repo: "ixnos-data",
     site: "https://vwdshka.github.io/ixnos-data/",
@@ -520,6 +522,7 @@ export const projects: Project[] = [
   },
   {
     name: "myData-Client-Lib",
+    work: "mydata",
     slug: "mydata-client-lib",
     repo: "myData-Client-Lib",
     year: "2026",
@@ -535,6 +538,7 @@ export const projects: Project[] = [
   },
   {
     name: "tabsesh",
+    work: "tabsesh",
     slug: "tabsesh",
     repo: "tabsesh",
     year: "2026",
@@ -551,6 +555,7 @@ export const projects: Project[] = [
   },
   {
     name: "Web accessibility extension",
+    work: "a11y",
     year: "2026",
     summary: {
       en: "A Chromium extension that checks the accessibility of a page while you use it, instead of after a crawl. A heuristic engine settles everything a rule can decide, and a Gemma 4 model running locally takes the cases that need judgement, so the page is analysed on your own machine and never sent to a server.",
@@ -565,6 +570,7 @@ export const projects: Project[] = [
   },
   {
     name: "LLM-Fake-News-Detector",
+    work: "fakenews",
     slug: "fake-news-detector",
     repo: "LLM-Fake-News-Detector",
     year: "2026",

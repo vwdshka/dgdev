@@ -7,15 +7,36 @@ import type { Locale } from "@/lib/i18n";
 
 const sections = ["about", "skills", "projects", "experience", "contact"] as const;
 
-function toggleTheme() {
+function toggleTheme(e: React.MouseEvent<HTMLButtonElement>) {
   const root = document.documentElement;
   const next = root.dataset.theme === "light" ? "dark" : "light";
-  root.dataset.theme = next;
-  try {
-    localStorage.setItem("theme", next);
-  } catch {
-    // Private windows may refuse storage; the switch still applies to this page.
-  }
+  const apply = () => {
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // Private windows may refuse storage; the switch still applies to this page.
+    }
+  };
+  if (!("startViewTransition" in document) || matchMedia("(prefers-reduced-motion: reduce)").matches) return apply();
+
+  // The new theme grows out of the button as a circle until it covers the farthest corner.
+  const b = e.currentTarget.getBoundingClientRect();
+  const x = b.left + b.width / 2;
+  const y = b.top + b.height / 2;
+  const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  root.classList.add("theme-sweep");
+  const vt = document.startViewTransition(apply);
+  vt.ready
+    .then(() =>
+      root.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+        { duration: 600, easing: "cubic-bezier(0.16, 1, 0.3, 1)", pseudoElement: "::view-transition-new(root)" },
+      ),
+    )
+    // Skipped (e.g. a background tab): the theme has still changed, there's just no sweep.
+    .catch(() => {});
+  vt.finished.finally(() => root.classList.remove("theme-sweep"));
 }
 
 export function Header({ locale, t }: { locale: Locale; t: UI["nav"] }) {

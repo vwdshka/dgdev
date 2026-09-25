@@ -83,7 +83,7 @@ export async function homeImage({ role, place, label }: { role: string; place: s
     (
       <Frame
         label={label}
-        left="Rust · TypeScript · Python · Java"
+        left="TypeScript · React · Python · Java"
         right={place}
       >
         <div style={{ display: "flex", fontFamily: "JetBrains Mono", fontSize: 28, color: c.muted }}>

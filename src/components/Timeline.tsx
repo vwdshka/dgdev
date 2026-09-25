@@ -10,7 +10,7 @@ const marker: Record<Entry["kind"], string> = {
   software: "bg-accent border-accent",
   education: "bg-ochre border-ochre",
   hospitality: "bg-olive border-olive",
-  retail: "bg-rust border-rust",
+  retail: "bg-brick border-brick",
 };
 
 export function Timeline({ entries, kinds }: { entries: Localized<Entry>[]; kinds: UI["kinds"] }) {

@@ -14,7 +14,7 @@
   --accent-ink: #1c1512;
   --ochre: #d9a441;
   --olive: #a3a862;
-  --rust: #d0654b;
+  --brick: #d0654b;
   --glow: rgb(232 137 74 / 0.13);
   --glow-2: rgb(217 164 65 / 0.08);
   color-scheme: dark;
@@ -30,7 +30,7 @@
   --accent-ink: #fffaf3;
   --ochre: #8c5e0e;
   --olive: #5c6628;
-  --rust: #963a28;
+  --brick: #963a28;
   --glow: rgb(214 120 60 / 0.16);
   --glow-2: rgb(217 164 65 / 0.16);
   color-scheme: light;
@@ -46,7 +46,7 @@
   --color-accent-ink: var(--accent-ink);
   --color-ochre: var(--ochre);
   --color-olive: var(--olive);
-  --color-rust: var(--rust);
+  --color-brick: var(--brick);
   --font-sans: var(--font-commissioner), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
@@ -233,4 +233,15 @@ h2 {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
   }
+}
+
+/* Theme switch: the new theme sweeps out of the button (Header.tsx drives the clip-path). The
+   page is one snapshot for this, so the header's own transition name is switched off. */
+:root.theme-sweep::view-transition-old(root),
+:root.theme-sweep::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+:root.theme-sweep header {
+  view-transition-name: none !important;
 }

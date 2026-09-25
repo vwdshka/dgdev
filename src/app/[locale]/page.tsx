@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { LiveIxnos } from "@/components/LiveIxnos";
 import { PageSlide } from "@/components/Reveal";
 import { ProjectGrid } from "@/components/Projects";
 import { About, Heading } from "@/components/Sections";
@@ -6,17 +7,18 @@ import { Skills } from "@/components/Skills";
 import { Timeline } from "@/components/Timeline";
 import { about, facts, profile, projects, skills, timeline, ui, works } from "@/lib/content";
 import { getRepoStats } from "@/lib/github";
+import { getIxnosMeta } from "@/lib/ixnos";
 import { isLocale, localize } from "@/lib/i18n";
 
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
   const t = localize(ui, locale);
-  const stats = await getRepoStats(projects.flatMap((p) => (p.repo ? [p.repo] : [])));
+  const [stats, ixnos] = await Promise.all([getRepoStats(projects.flatMap((p) => (p.repo ? [p.repo] : []))), getIxnosMeta()]);
 
   return (
     <PageSlide>
-      <Hero t={t.hero} facts={localize(facts, locale)} />
+      <Hero t={t.hero} facts={localize(facts, locale)} live={<LiveIxnos initial={ixnos} locale={locale} t={t.live} />} />
       <About title={t.headings.about} {...localize(about, locale)} />
       <section aria-labelledby="skills" className="border-y border-line bg-raised">
         <div className="mx-auto max-w-5xl px-4 py-24 sm:px-6">
@@ -29,7 +31,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
               </span>
             }
           />
-          <Skills groups={localize(skills, locale)} works={works} locale={locale} t={t.skills} />
+          <Skills groups={localize(skills, locale)} works={works} featured={projects.map((p) => p.work)} locale={locale} t={t.skills} />
         </div>
       </section>
       <section aria-labelledby="projects" className="mx-auto max-w-5xl px-4 py-24 sm:px-6">

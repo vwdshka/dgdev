@@ -32,7 +32,7 @@ function Line({ children, i, className }: { children: React.ReactNode; i: number
   );
 }
 
-export function Hero({ t, facts }: { t: UI["hero"]; facts: string[][] }) {
+export function Hero({ t, facts, live }: { t: UI["hero"]; facts: string[][]; live?: React.ReactNode }) {
   const reduce = useReducedMotion() ?? false;
   const typed = useTyped(COMMAND, reduce);
   const done = typed >= COMMAND.length;
@@ -107,20 +107,22 @@ export function Hero({ t, facts }: { t: UI["hero"]; facts: string[][] }) {
           </motion.div>
         </div>
 
-        <motion.dl
-          className="border-t-2 border-ink pt-4 font-mono text-[13px]"
+        <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.56, ease: EASE, delay: 1.3 }}
         >
-          {facts.map(([k, v]) => (
-            <div key={k} className="flex items-baseline gap-2 py-1.5">
-              <dt className="shrink-0 uppercase tracking-wide text-muted">{k}</dt>
-              <span aria-hidden="true" className="leader" />
-              <dd className="whitespace-nowrap text-right">{v}</dd>
-            </div>
-          ))}
-        </motion.dl>
+          <dl className="border-t-2 border-ink pt-4 font-mono text-[13px]">
+            {facts.map(([k, v]) => (
+              <div key={k} className="flex items-baseline gap-2 py-1.5">
+                <dt className="shrink-0 uppercase tracking-wide text-muted">{k}</dt>
+                <span aria-hidden="true" className="leader" />
+                <dd className="whitespace-nowrap text-right">{v}</dd>
+              </div>
+            ))}
+          </dl>
+          {live}
+        </motion.div>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { SkillGroup, UI, works as allWorks } from "@/lib/content";
 import type { Locale, Localized } from "@/lib/i18n";
+import { pickSkill } from "@/lib/picked-skill";
 import { EASE, Reveal } from "./Reveal";
 
 type Group = Localized<SkillGroup>;
@@ -15,10 +16,14 @@ const tone: Record<SkillGroup["tone"], string> = {
   accent: "var(--accent)",
   ochre: "var(--ochre)",
   olive: "var(--olive)",
-  rust: "var(--rust)",
+  brick: "var(--brick)",
 };
 
-const file = (name: string) => `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}.md`;
+const file = (name: string) =>
+  `${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-$/, "")}.md`;
 
 function Icon({ path, className }: { path: string; className?: string }) {
   return (
@@ -28,40 +33,83 @@ function Icon({ path, className }: { path: string; className?: string }) {
   );
 }
 
-function UsedIn({ skill, works, locale, t }: { skill: Skill; works: Works; locale: Locale; t: UI["skills"] }) {
-  if (!skill.used.length) return <p className="text-muted">{t.everywhere}</p>;
+function UsedIn({
+  skill,
+  works,
+  featured,
+  locale,
+  t,
+}: {
+  skill: Skill;
+  works: Works;
+  featured: string[];
+  locale: Locale;
+  t: UI["skills"];
+}) {
+  const shown = !skill.used.length || skill.used.some((k) => featured.includes(k));
+  const jump = shown && (
+    <a href="#projects" className="mt-3 inline-block text-accent no-underline hover:underline">
+      {t.jump}
+    </a>
+  );
+  if (!skill.used.length)
+    return (
+      <>
+        <p className="text-muted">{t.everywhere}</p>
+        {jump}
+      </>
+    );
   return (
-    <ul className="space-y-1">
-      {skill.used.map((key) => {
-        const w = works[key];
-        const link = "underline decoration-line underline-offset-4 hover:text-accent hover:decoration-accent";
-        return (
-          <li key={key} className="flex gap-2">
-            <span aria-hidden="true" className="text-accent">→</span>
-            {w.slug ? (
-              <Link href={`/${locale}/projects/${w.slug}/`} transitionTypes={["nav-forward"]} className={link}>
-                {w.name}
-              </Link>
-            ) : w.href ? (
-              <a href={w.href} className={link}>
-                {w.name}
-              </a>
-            ) : (
-              <span>{w.name}</span>
-            )}
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <ul className="space-y-1">
+        {skill.used.map((key) => {
+          const w = works[key];
+          const link = "underline decoration-line underline-offset-4 hover:text-accent hover:decoration-accent";
+          return (
+            <li key={key} className="flex gap-2">
+              <span aria-hidden="true" className="text-accent">
+                →
+              </span>
+              {w.slug ? (
+                <Link href={`/${locale}/projects/${w.slug}/`} transitionTypes={["nav-forward"]} className={link}>
+                  {w.name}
+                </Link>
+              ) : w.href ? (
+                <a href={w.href} className={link}>
+                  {w.name}
+                </a>
+              ) : (
+                <span>{w.name}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {jump}
+    </>
   );
 }
 
 // The panel on the right: `cat` of whichever file is selected in the tree.
-function Terminal({ group, skill, works, locale, t }: { group: Group; skill: Skill; works: Works; locale: Locale; t: UI["skills"] }) {
+function Terminal({
+  group,
+  skill,
+  works,
+  featured,
+  locale,
+  t,
+}: {
+  group: Group;
+  skill: Skill;
+  works: Works;
+  featured: string[];
+  locale: Locale;
+  t: UI["skills"];
+}) {
   return (
     <div className="overflow-hidden rounded-sm border border-line bg-bg shadow-[0_24px_48px_-32px_var(--glow)]">
       <div className="relative flex h-9 items-center gap-1.5 border-b border-line px-3">
-        <span className="size-2.5 rounded-full bg-rust/70" />
+        <span className="size-2.5 rounded-full bg-brick/70" />
         <span className="size-2.5 rounded-full bg-ochre/70" />
         <span className="size-2.5 rounded-full bg-olive/70" />
         <span className="absolute inset-x-0 text-center font-mono text-[11px] text-muted">~/stack — zsh</span>
@@ -78,7 +126,10 @@ function Terminal({ group, skill, works, locale, t }: { group: Group; skill: Ski
           transition={{ duration: 0.25, ease: EASE }}
         >
           <div className="mt-5 flex items-center gap-3">
-            <span className="grid size-11 shrink-0 place-items-center rounded-sm border border-line" style={{ color: tone[group.tone] }}>
+            <span
+              className="grid size-11 shrink-0 place-items-center rounded-sm border border-line"
+              style={{ color: tone[group.tone] }}
+            >
               <Icon path={skill.icon} className="size-6" />
             </span>
             <div>
@@ -94,7 +145,7 @@ function Terminal({ group, skill, works, locale, t }: { group: Group; skill: Ski
           <p className="mt-4 font-sans text-[15px] leading-relaxed">{skill.note}</p>
           <p className="mt-5 text-[11px] uppercase tracking-wide text-muted">{t.usedIn}</p>
           <div className="mt-2">
-            <UsedIn skill={skill} works={works} locale={locale} t={t} />
+            <UsedIn skill={skill} works={works} featured={featured} locale={locale} t={t} />
           </div>
         </motion.div>
         <p className="mt-5">
@@ -106,7 +157,20 @@ function Terminal({ group, skill, works, locale, t }: { group: Group; skill: Ski
   );
 }
 
-export function Skills({ groups, works, locale, t }: { groups: Group[]; works: Works; locale: Locale; t: UI["skills"] }) {
+export function Skills({
+  groups,
+  works,
+  featured,
+  locale,
+  t,
+}: {
+  groups: Group[];
+  works: Works;
+  /** `work` keys of the projects shown on this page. */
+  featured: string[];
+  locale: Locale;
+  t: UI["skills"];
+}) {
   const [selected, setSelected] = useState(groups[0].items[0].name);
   const group = groups.find((g) => g.items.some((s) => s.name === selected))!;
   const skill = group.items.find((s) => s.name === selected)!;
@@ -115,7 +179,8 @@ export function Skills({ groups, works, locale, t }: { groups: Group[]; works: W
     <div className="grid gap-6 lg:grid-cols-[1fr_21rem] lg:items-start">
       <div>
         <p className="mb-4 font-mono text-sm text-muted">
-          <span className="text-accent">~/stack</span> <span aria-hidden="true">$</span> <span className="text-ink">tree -L 2</span>
+          <span className="text-accent">~/stack</span> <span aria-hidden="true">$</span>{" "}
+          <span className="text-ink">tree -L 2</span>
           <span className="hidden sm:inline">{`  # ${t.hint}`}</span>
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -139,7 +204,10 @@ export function Skills({ groups, works, locale, t }: { groups: Group[]; works: W
                     <li key={s.name}>
                       <button
                         type="button"
-                        onClick={() => setSelected(s.name)}
+                        onClick={() => {
+                          setSelected(s.name);
+                          pickSkill({ name: s.name, used: s.used });
+                        }}
                         aria-pressed={on}
                         className={`group flex w-full items-center gap-2.5 rounded-sm px-2 py-1.5 text-left transition-colors duration-150 ${
                           on ? "bg-ink text-bg" : "hover:bg-line/60"
@@ -149,7 +217,9 @@ export function Skills({ groups, works, locale, t }: { groups: Group[]; works: W
                           {i === g.items.length - 1 ? "└──" : "├──"}
                         </span>
                         <Icon path={s.icon} className="size-4 shrink-0" />
-                        <span className={`min-w-0 flex-1 truncate font-sans text-[15px] ${s.core ? "font-semibold" : ""}`}>{s.name}</span>
+                        <span className={`min-w-0 flex-1 truncate font-sans text-[15px] ${s.core ? "font-semibold" : ""}`}>
+                          {s.name}
+                        </span>
                         {s.core && (
                           <span className="size-2 shrink-0 bg-accent" title={t.core}>
                             <span className="sr-only">{t.core}</span>
@@ -169,7 +239,7 @@ export function Skills({ groups, works, locale, t }: { groups: Group[]; works: W
                             <p className="font-sans text-[15px] leading-relaxed">{s.note}</p>
                             <p className="mt-3 text-[11px] uppercase tracking-wide text-muted">{t.usedIn}</p>
                             <div className="mt-1.5">
-                              <UsedIn skill={s} works={works} locale={locale} t={t} />
+                              <UsedIn skill={s} works={works} featured={featured} locale={locale} t={t} />
                             </div>
                           </div>
                         </motion.div>
@@ -183,7 +253,7 @@ export function Skills({ groups, works, locale, t }: { groups: Group[]; works: W
         </div>
       </div>
       <div className="sticky top-20 hidden lg:block">
-        <Terminal group={group} skill={skill} works={works} locale={locale} t={t} />
+        <Terminal group={group} skill={skill} works={works} featured={featured} locale={locale} t={t} />
       </div>
     </div>
   );
