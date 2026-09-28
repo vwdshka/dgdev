@@ -44,9 +44,9 @@ export const preview = (url: string) => [{ url, width: 1200, height: 630, alt: `
 
 export const ui = {
   meta: {
-    title: { en: "David Gavriilidis · Software Engineer", el: "David Gavriilidis · Μηχανικός Λογισμικού" },
+    title: { en: "David Gavriilidis · Software Developer", el: "David Gavriilidis · Μηχανικός Λογισμικού" },
     description: {
-      en: "David Gavriilidis, software engineer in Athens. Backends, data pipelines and browser extensions in TypeScript, Python and Java.",
+      en: "David Gavriilidis, software Developer in Athens. Backends, data pipelines and browser extensions in TypeScript, Python and Java.",
       el: "David Gavriilidis, μηχανικός λογισμικού στην Αθήνα. Backends, pipelines δεδομένων και browser extensions σε TypeScript, Python και Java.",
     },
   },
@@ -67,7 +67,7 @@ export const ui = {
   },
   hero: {
     output: {
-      en: "software engineer · backend, data, the odd browser extension",
+      en: "software developer · backend, data, the odd browser extension",
       el: "μηχανικός λογισμικού · backend, δεδομένα, και κάποιο browser extension",
     },
     lede: {
